@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   dst-server:
     image: felddy/dontstarvetogether:latest
