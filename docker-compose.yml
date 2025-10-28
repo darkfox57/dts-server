@@ -2,9 +2,6 @@ services:
   dst-server:
     image: felddy/dontstarvetogether:latest
     restart: unless-stopped
-    ports:
-      - "10999:10999/udp"
-      - "10998:10998/udp"
     volumes:
       - dst-data:/root/.klei
     environment:
