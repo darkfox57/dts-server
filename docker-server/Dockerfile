@@ -74,56 +74,62 @@ COPY --chown=steam:steam Caves/ /home/steam/.klei/DoNotStarveTogether/MyDediServ
 # Copiar configuración de supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Crear script de inicialización inline
-RUN echo '#!/bin/bash\n\
-set -e\n\
-echo "Iniciando servidor Don'\''t Starve Together..."\n\
-\n\
-# Generar cluster.ini dinámicamente\n\
-echo "Generando configuración del cluster..."\n\
-cat > /home/steam/.klei/DoNotStarveTogether/MyDediServer/cluster.ini << EOF\n\
-[GAMEPLAY]\n\
-game_mode = ${GAME_MODE:-survival}\n\
-max_players = ${MAX_PLAYERS:-12}\n\
-pvp = ${PVP:-false}\n\
-pause_when_empty = ${PAUSE_WHEN_EMPTY:-true}\n\
-\n\
-[NETWORK]\n\
-lan_only_cluster = ${LAN_ONLY:-false}\n\
-cluster_password = ${CLUSTER_PASSWORD:-}\n\
-cluster_description = ${CLUSTER_DESCRIPTION:-Servidor Don'\''t Starve Together dockerizado}\n\
-cluster_name = ${CLUSTER_NAME:-dts-server}\n\
-offline_cluster = ${OFFLINE_CLUSTER:-false}\n\
-cluster_language = ${CLUSTER_LANGUAGE:-en}\n\
-\n\
-[MISC]\n\
-console_enabled = ${CONSOLE_ENABLED:-true}\n\
-\n\
-[SHARD]\n\
-shard_enabled = true\n\
-bind_ip = ${BIND_IP:-0.0.0.0}\n\
-master_ip = ${MASTER_IP:-127.0.0.1}\n\
-master_port = ${CLUSTER_PORT:-10888}\n\
-cluster_key = ${CLUSTER_KEY:-defaultPass}\n\
-EOF\n\
-\n\
-# Configurar Steam token si se proporciona\n\
-if [ ! -z "$STEAM_TOKEN" ]; then\n\
-    echo "Configurando Steam token..."\n\
-    echo "$STEAM_TOKEN" > /home/steam/.klei/DoNotStarveTogether/MyDediServer/cluster_token.txt\n\
-    chown steam:steam /home/steam/.klei/DoNotStarveTogether/MyDediServer/cluster_token.txt\n\
-else\n\
-    echo "ADVERTENCIA: No se proporcionó STEAM_TOKEN. El servidor funcionará solo en LAN."\n\
-fi\n\
-\n\
-echo "Actualizando servidor..."\n\
-cd /home/steam\n\
-sudo -u steam ./steamcmd.sh +force_install_dir /home/steam/dst +login anonymous +app_update 343050 validate +quit\n\
-chown -R steam:steam /home/steam/.klei/DoNotStarveTogether/MyDediServer/\n\
-chown -R steam:steam /home/steam/dst/\n\
-echo "Configuración completada. Iniciando supervisor..."\n\
-exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf' > /home/steam/start_server.sh \
-    && chmod +x /home/steam/start_server.sh
+# Crear script de inicialización inline (simplificado)
+RUN cat > /home/steam/start_server.sh << 'SCRIPT'
+#!/bin/bash
+set -e
+
+echo "Iniciando servidor Don't Starve Together..."
+
+# Generar cluster.ini dinámicamente
+echo "Generando configuración del cluster..."
+cat > /home/steam/.klei/DoNotStarveTogether/MyDediServer/cluster.ini << EOF
+[GAMEPLAY]
+game_mode = ${GAME_MODE:-survival}
+max_players = ${MAX_PLAYERS:-12}
+pvp = ${PVP:-false}
+pause_when_empty = ${PAUSE_WHEN_EMPTY:-true}
+
+[NETWORK]
+lan_only_cluster = ${LAN_ONLY:-false}
+cluster_password = ${CLUSTER_PASSWORD:-}
+cluster_description = ${CLUSTER_DESCRIPTION:-Servidor Don't Starve Together dockerizado}
+cluster_name = ${CLUSTER_NAME:-dts-server}
+offline_cluster = ${OFFLINE_CLUSTER:-false}
+cluster_language = ${CLUSTER_LANGUAGE:-en}
+
+[MISC]
+console_enabled = ${CONSOLE_ENABLED:-true}
+
+[SHARD]
+shard_enabled = true
+bind_ip = ${BIND_IP:-0.0.0.0}
+master_ip = ${MASTER_IP:-127.0.0.1}
+master_port = ${CLUSTER_PORT:-10888}
+cluster_key = ${CLUSTER_KEY:-defaultPass}
+EOF
+
+# Configurar Steam token si se proporciona
+if [ ! -z "$STEAM_TOKEN" ]; then
+    echo "Configurando Steam token..."
+    echo "$STEAM_TOKEN" > /home/steam/.klei/DoNotStarveTogether/MyDediServer/cluster_token.txt
+    chown steam:steam /home/steam/.klei/DoNotStarveTogether/MyDediServer/cluster_token.txt
+else
+    echo "ADVERTENCIA: No se proporcionó STEAM_TOKEN. El servidor funcionará solo en LAN."
+fi
+
+echo "Actualizando servidor..."
+cd /home/steam
+sudo -u steam ./steamcmd.sh +force_install_dir /home/steam/dst +login anonymous +app_update 343050 validate +quit
+
+chown -R steam:steam /home/steam/.klei/DoNotStarveTogether/MyDediServer/
+chown -R steam:steam /home/steam/dst/
+
+echo "Configuración completada. Iniciando supervisor..."
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+SCRIPT
+
+RUN chmod +x /home/steam/start_server.sh
 
 # Exponer puertos
 EXPOSE 10999/udp 10998/udp 10888/tcp 27017/tcp 8767/tcp
