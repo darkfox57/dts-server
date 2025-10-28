@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  dst-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dont-starve-together
+    restart: unless-stopped
+    ports:
+      - "10999:10999/udp"  # Master server port
+      - "10998:10998/udp"  # Caves server port
+      - "10888:10888/tcp"  # Cluster communication
+      - "27017:27017/tcp"  # Master server port for Steam
+      - "8767:8767/tcp"    # Authentication port
+    volumes:
+      - dst_data:/home/steam/.klei/DoNotStarveTogether/MyDediServer
+      - dst_game:/home/steam/dst
+    environment:
+      - CLUSTER_NAME=dts-server
+      - CLUSTER_PASSWORD=
+      - MAX_PLAYERS=12
+      - GAME_MODE=survival
+      - PVP=false
+      - PAUSE_WHEN_EMPTY=true
+    networks:
+      - dst-network
+
+volumes:
+  dst_data:
+    driver: local
+  dst_game:
+    driver: local
+
+networks:
+  dst-network:
+    driver: bridge
