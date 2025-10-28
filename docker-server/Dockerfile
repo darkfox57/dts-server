@@ -5,13 +5,14 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Instalar dependencias necesarias
 RUN apt-get update && apt-get install -y \
-    lib32gcc1 \
+    lib32gcc-s1 \
     lib32stdc++6 \
     libcurl4-gnutls-dev:i386 \
     wget \
     curl \
     unzip \
     supervisor \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # Crear usuario steam para ejecutar el servidor
@@ -42,7 +43,8 @@ COPY --chown=steam:steam Caves/ /home/steam/.klei/DoNotStarveTogether/MyDediServ
 
 # Copiar script de inicio
 COPY start_server.sh /home/steam/start_server.sh
-RUN chmod +x /home/steam/start_server.sh
+COPY start_dst_servers.sh /home/steam/start_dst_servers.sh
+RUN chmod +x /home/steam/start_server.sh /home/steam/start_dst_servers.sh
 
 # Copiar configuración de supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf

@@ -19,53 +19,59 @@ Todos los archivos están en la carpeta `docker-server/`:
 - `start_server.sh` - Script de inicialización
 - `supervisord.conf` - Configuración de procesos
 
-## Pasos para Desplegar en EasyPanel
+## Pasos para Desplegar en VPS con Docker
 
-### 1. Preparar los Archivos
+### 1. Preparar el VPS
 
-Sube todos los archivos de la carpeta `docker-server/` a tu repositorio Git o directamente a EasyPanel.
+Asegúrate de que tu VPS tenga:
+- Docker instalado y funcionando
+- Docker Compose instalado
+- Puertos abiertos: 10999/udp, 10998/udp, 10888/tcp, 27017/tcp, 8767/tcp
+- Al menos 2GB de RAM disponible
+- Espacio en disco suficiente (mínimo 5GB)
 
-### 2. Configurar en EasyPanel
-
-1. **Crear Nueva Aplicación**:
-   - Ve a tu dashboard de EasyPanel
-   - Crea una nueva aplicación de tipo "Docker"
-
-2. **Configurar Variables de Entorno**:
-   ```
-   STEAM_TOKEN=tu_token_aqui
-   CLUSTER_NAME=dts-server
-   MAX_PLAYERS=12
-   ```
-
-3. **Configurar Puertos**:
-   - Puerto 10999 (UDP) - Servidor Master
-   - Puerto 10998 (UDP) - Servidor Caves  
-   - Puerto 10888 (TCP) - Comunicación entre shards
-   - Puerto 27017 (TCP) - Steam Master Server
-   - Puerto 8767 (TCP) - Autenticación Steam
-
-### 3. Deployment con Docker Compose
-
-Si EasyPanel soporta Docker Compose, simplemente usa el archivo `docker-compose.yml`.
-
-Si necesitas deployment manual:
+### 2. Clonar y Configurar
 
 ```bash
-# Construir la imagen
-docker build -t dst-server .
+# Clonar el repositorio
+git clone <tu-repositorio>
+cd dts-server/docker-server
 
-# Ejecutar el contenedor
-docker run -d \
-  --name dont-starve-together \
-  -p 10999:10999/udp \
-  -p 10998:10998/udp \
-  -p 10888:10888/tcp \
-  -p 27017:27017/tcp \
-  -p 8767:8767/tcp \
-  -e STEAM_TOKEN=tu_token_aqui \
-  -v dst_data:/home/steam/.klei/DoNotStarveTogether/MyDediServer \
-  dst-server
+# Copiar y configurar variables de entorno
+cp env.example .env
+nano .env  # Editar con tu token de Steam
+```
+
+### 3. Obtener Token de Steam
+
+1. Ve a https://accounts.klei.com/account/game/servers?game=DontStarveTogether
+2. Genera un nuevo token
+3. Copia el token en el archivo `.env`
+
+### 4. Deployment
+
+```bash
+# Construir y ejecutar
+docker-compose up -d
+
+# Ver logs
+docker-compose logs -f
+
+# Ver logs específicos
+docker-compose logs -f dst-server
+```
+
+### 5. Verificar el Estado
+
+```bash
+# Estado de los contenedores
+docker-compose ps
+
+# Logs del servidor Master
+docker-compose exec dst-server tail -f /var/log/dst-master.log
+
+# Logs del servidor Caves
+docker-compose exec dst-server tail -f /var/log/dst-caves.log
 ```
 
 ### 4. Configuración Avanzada
