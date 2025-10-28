@@ -1,23 +1,24 @@
-# Servidor Don't Starve Together con Docker en EasyPanel
+# Servidor Don't Starve Together con Docker
 
-## Requisitos Previos
+Este directorio contiene la configuración para desplegar el servidor Don't Starve Together usando Docker.
 
-1. **Cuenta en EasyPanel** con acceso a deploy Docker containers
-2. **Steam Token** - Necesitas generar un token desde tu cuenta de Steam:
-   - Ve a https://accounts.klei.com/account/game/servers?game=DontStarveTogether
-   - Genera un nuevo token para tu servidor
+## Estructura del Proyecto
 
-## Archivos Necesarios
+```
+dts-server/
+├── cluster.ini              # Configuración para servidor local/manual
+├── Master/                  # Configuración mundo principal (local)
+├── Caves/                   # Configuración mundo cuevas (local)
+└── docker-server/           # 🐳 Configuración Docker
+    ├── Dockerfile           # Imagen Docker
+    ├── docker-compose.yml   # Orquestación de servicios
+    ├── supervisord.conf     # Gestión de procesos
+    ├── Master/              # Config mundo principal (Docker)
+    ├── Caves/               # Config mundo cuevas (Docker)
+    └── deploy.sh            # Script de deployment
+```
 
-Todos los archivos están en la carpeta `docker-server/`:
-
-- `Dockerfile` - Imagen base del servidor
-- `docker-compose.yml` - Configuración de servicios
-- `cluster.ini` - Configuración general del cluster
-- `Master/` - Configuración del mundo principal
-- `Caves/` - Configuración del mundo de cuevas
-- `start_server.sh` - Script de inicialización
-- `supervisord.conf` - Configuración de procesos
+**Nota importante:** La configuración de `cluster.ini` se genera dinámicamente durante el build de Docker usando los argumentos de construcción, por lo que no hay archivo estático en este directorio.
 
 ## Pasos para Desplegar en VPS con Docker
 
