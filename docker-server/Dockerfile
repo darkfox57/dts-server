@@ -136,8 +136,10 @@ else
     echo "ADVERTENCIA: STEAM_TOKEN no configurado"
 fi
 
-echo "Verificando archivos SteamCMD..."
-ls -la /home/steam/steamcmd.sh || echo "steamcmd.sh no encontrado"
+echo "Verificando ejecutable DST..."
+find /home/steam/dst -name "*dontstarve*" -type f 2>/dev/null || echo "No se encontró ejecutable DST"
+ls -la /home/steam/dst/bin/ 2>/dev/null || echo "Directorio bin no existe"
+ls -la /home/steam/dst/bin64/ 2>/dev/null || echo "Directorio bin64 no existe"
 
 echo "Verificando supervisor..."
 which supervisord || echo "supervisord no encontrado"
