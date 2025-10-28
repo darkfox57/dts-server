@@ -1,0 +1,25 @@
+cat > docker-compose.yml << 'EOF'
+version: '3.8'
+
+services:
+  dst-server:
+    image: jamesits/dst-server:latest
+    container_name: dst-server
+    restart: unless-stopped
+    ports:
+      - "10999:10999/udp"
+      - "10998:10998/udp"
+    volumes:
+      - dst-data:/DoNotStarveTogether
+      - ./config:/config
+    environment:
+      - SERVER_NAME=DarkFox Server
+      - MAX_PLAYERS=16
+      - SERVER_PASSWORD=@Maracuya2020
+      - GAME_MODE=survival
+      - SERVER_INTENTION=cooperative
+      - MODS=workshop-1458450094,workshop-2078243581,workshop-1974725370,workshop-358749986,workshop-1818688368,workshop-458940297,workshop-375859599,workshop-374550642,workshop-2521749376,workshop-374550642,workshop-623749604
+
+volumes:
+  dst-data:
+EOF
