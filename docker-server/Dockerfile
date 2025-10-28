@@ -74,59 +74,78 @@ COPY --chown=steam:steam Caves/ /home/steam/.klei/DoNotStarveTogether/MyDediServ
 # Copiar configuración de supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Crear script de inicialización inline (simplificado)
+# Crear script de diagnóstico simple
 RUN cat > /home/steam/start_server.sh << 'SCRIPT'
 #!/bin/bash
 set -e
 
-echo "Iniciando servidor Don't Starve Together..."
+echo "=== DIAGNÓSTICO INICIO ==="
+echo "Usuario actual: $(whoami)"
+echo "Directorio actual: $(pwd)"
+echo "Variables de entorno relevantes:"
+echo "STEAM_TOKEN: ${STEAM_TOKEN:0:10}..." 
+echo "CLUSTER_NAME: $CLUSTER_NAME"
+echo "CLUSTER_PASSWORD: $CLUSTER_PASSWORD"
+echo "================================"
 
-# Generar cluster.ini dinámicamente
-echo "Generando configuración del cluster..."
+echo "Verificando directorios..."
+ls -la /home/steam/ || echo "Error listando /home/steam/"
+ls -la /home/steam/.klei/ || echo "Error listando .klei"
+
+echo "Probando generación de cluster.ini..."
+mkdir -p /home/steam/.klei/DoNotStarveTogether/MyDediServer
+echo "Directorio creado exitosamente"
+
+# Generar cluster.ini básico
 cat > /home/steam/.klei/DoNotStarveTogether/MyDediServer/cluster.ini << EOF
 [GAMEPLAY]
-game_mode = ${GAME_MODE:-survival}
-max_players = ${MAX_PLAYERS:-12}
-pvp = ${PVP:-false}
-pause_when_empty = ${PAUSE_WHEN_EMPTY:-true}
+game_mode = survival
+max_players = 12
+pvp = false
+pause_when_empty = true
 
 [NETWORK]
-lan_only_cluster = ${LAN_ONLY:-false}
+lan_only_cluster = false
 cluster_password = ${CLUSTER_PASSWORD:-}
-cluster_description = ${CLUSTER_DESCRIPTION:-Servidor Don't Starve Together dockerizado}
+cluster_description = Servidor DST Test
 cluster_name = ${CLUSTER_NAME:-dts-server}
-offline_cluster = ${OFFLINE_CLUSTER:-false}
-cluster_language = ${CLUSTER_LANGUAGE:-en}
+offline_cluster = false
+cluster_language = en
 
 [MISC]
-console_enabled = ${CONSOLE_ENABLED:-true}
+console_enabled = true
 
 [SHARD]
 shard_enabled = true
-bind_ip = ${BIND_IP:-0.0.0.0}
-master_ip = ${MASTER_IP:-127.0.0.1}
-master_port = ${CLUSTER_PORT:-10888}
-cluster_key = ${CLUSTER_KEY:-defaultPass}
+bind_ip = 0.0.0.0
+master_ip = 127.0.0.1
+master_port = 10888
+cluster_key = defaultPass
 EOF
 
-# Configurar Steam token si se proporciona
+echo "cluster.ini generado exitosamente"
+cat /home/steam/.klei/DoNotStarveTogether/MyDediServer/cluster.ini
+
+# Configurar token
 if [ ! -z "$STEAM_TOKEN" ]; then
     echo "Configurando Steam token..."
     echo "$STEAM_TOKEN" > /home/steam/.klei/DoNotStarveTogether/MyDediServer/cluster_token.txt
     chown steam:steam /home/steam/.klei/DoNotStarveTogether/MyDediServer/cluster_token.txt
+    echo "Token configurado"
 else
-    echo "ADVERTENCIA: No se proporcionó STEAM_TOKEN. El servidor funcionará solo en LAN."
+    echo "ADVERTENCIA: STEAM_TOKEN no configurado"
 fi
 
-echo "Actualizando servidor..."
-cd /home/steam
-sudo -u steam ./steamcmd.sh +force_install_dir /home/steam/dst +login anonymous +app_update 343050 validate +quit
+echo "Verificando archivos SteamCMD..."
+ls -la /home/steam/steamcmd.sh || echo "steamcmd.sh no encontrado"
 
-chown -R steam:steam /home/steam/.klei/DoNotStarveTogether/MyDediServer/
-chown -R steam:steam /home/steam/dst/
+echo "Verificando supervisor..."
+which supervisord || echo "supervisord no encontrado"
+ls -la /etc/supervisor/conf.d/supervisord.conf || echo "supervisord.conf no encontrado"
 
-echo "Configuración completada. Iniciando supervisor..."
-exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+echo "=== FIN DIAGNÓSTICO ==="
+echo "Iniciando supervisor en modo debug..."
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf -n
 SCRIPT
 
 RUN chmod +x /home/steam/start_server.sh
