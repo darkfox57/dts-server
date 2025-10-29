@@ -81,11 +81,12 @@ RUN cat > /home/steam/start_server.sh << 'SCRIPT'
 set -e
 
 echo "=== DIAGNÓSTICO INICIO ==="
+echo "🦊 DARKFOX DST SERVER v2.0"
 echo "Usuario actual: $(whoami)"
 echo "Directorio actual: $(pwd)"
 echo "Variables de entorno relevantes:"
 echo "STEAM_TOKEN: ${STEAM_TOKEN:0:10}..." 
-echo "CLUSTER_NAME: $CLUSTER_NAME"
+echo "CLUSTER_NAME: darkfox-server"
 echo "CLUSTER_PASSWORD: $CLUSTER_PASSWORD"
 echo "================================"
 
@@ -108,8 +109,8 @@ pause_when_empty = true
 [NETWORK]
 lan_only_cluster = false
 cluster_password = ${CLUSTER_PASSWORD:-}
-cluster_description = Servidor DST Test
-cluster_name = ${CLUSTER_NAME:-dts-server}
+cluster_description = DarkFox DST Server
+cluster_name = darkfox-server
 offline_cluster = false
 cluster_language = en
 
