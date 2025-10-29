@@ -61,8 +61,11 @@ RUN wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz 
 # Crear directorios necesarios
 RUN mkdir -p /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether
 
-# Instalar Don't Starve Together Dedicated Server
+# Instalar Don't Starve Together Dedicated Server y configurar mods
 RUN ./steamcmd.sh +force_install_dir /home/steam/dst +login anonymous +app_update 343050 validate +quit
+
+# IMPORTANTE: DST descargará automáticamente los mods del Workshop cuando esté configurado correctamente
+# Los mods se descargan la primera vez que el servidor se inicia con la configuración modoverrides.lua
 
 # Cambiar de vuelta a root para configurar supervisor
 USER root
@@ -185,6 +188,15 @@ ls -la /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/ || echo 
 
 echo "Verificando permisos..."
 chown -R steam:steam /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/
+
+echo "Verificando configuración de mods..."
+echo "Archivos modoverrides.lua:"
+ls -la /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/modoverrides.lua
+ls -la /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/modoverrides.lua
+echo "Contenido de modoverrides Master:"
+head -5 /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/modoverrides.lua
+echo "Directorio de mods DST:"
+ls -la /home/steam/dst/mods/ 2>/dev/null || echo "Directorio mods no existe aún"
 
 echo "Probando inicio manual de DST para ver errores..."
 cd /home/steam/dst/bin
