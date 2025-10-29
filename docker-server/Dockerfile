@@ -91,6 +91,9 @@ RUN if [ ! -f "/home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/
 COPY --chown=steam:steam Master/modoverrides.lua /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/modoverrides.lua
 COPY --chown=steam:steam Caves/modoverrides.lua /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/modoverrides.lua
 
+# Copiar configuración de mods para descarga del Workshop
+COPY --chown=steam:steam dedicated_server_mods_setup.lua /home/steam/dst/mods/dedicated_server_mods_setup.lua
+
 # Copiar configuración de supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
