@@ -59,7 +59,7 @@ RUN wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz 
     && rm steamcmd_linux.tar.gz
 
 # Crear directorios necesarios
-RUN mkdir -p /home/steam/.klei/DoNotStarveTogether/MyDediServer
+RUN mkdir -p /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether
 
 # Instalar Don't Starve Together Dedicated Server
 RUN ./steamcmd.sh +force_install_dir /home/steam/dst +login anonymous +app_update 343050 validate +quit
@@ -68,25 +68,25 @@ RUN ./steamcmd.sh +force_install_dir /home/steam/dst +login anonymous +app_updat
 USER root
 
 # Crear directorios y copiar configuraciones de shards
-RUN mkdir -p /home/steam/.klei/DoNotStarveTogether/MyDediServer/Master \
-    && mkdir -p /home/steam/.klei/DoNotStarveTogether/MyDediServer/Caves
+RUN mkdir -p /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master \
+    && mkdir -p /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves
 
 # Copiar archivos de configuración de shards
-COPY --chown=steam:steam Master/ /home/steam/.klei/DoNotStarveTogether/MyDediServer/Master/
-COPY --chown=steam:steam Caves/ /home/steam/.klei/DoNotStarveTogether/MyDediServer/Caves/
+COPY --chown=steam:steam Master/ /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/
+COPY --chown=steam:steam Caves/ /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/
 
 # Crear configuraciones básicas de mundo si no existen
-RUN if [ ! -f "/home/steam/.klei/DoNotStarveTogether/MyDediServer/Master/leveldataoverride.lua" ]; then \
-        echo 'return { override_enabled = true, settings = {} }' > /home/steam/.klei/DoNotStarveTogether/MyDediServer/Master/leveldataoverride.lua; \
+RUN if [ ! -f "/home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/leveldataoverride.lua" ]; then \
+        echo 'return { override_enabled = true, settings = {} }' > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/leveldataoverride.lua; \
     fi && \
-    if [ ! -f "/home/steam/.klei/DoNotStarveTogether/MyDediServer/Caves/leveldataoverride.lua" ]; then \
-        echo 'return { override_enabled = true, preset = "DST_CAVE", settings = {} }' > /home/steam/.klei/DoNotStarveTogether/MyDediServer/Caves/leveldataoverride.lua; \
+    if [ ! -f "/home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/leveldataoverride.lua" ]; then \
+        echo 'return { override_enabled = true, preset = "DST_CAVE", settings = {} }' > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/leveldataoverride.lua; \
     fi && \
-    if [ ! -f "/home/steam/.klei/DoNotStarveTogether/MyDediServer/Master/modoverrides.lua" ]; then \
-        echo 'return {}' > /home/steam/.klei/DoNotStarveTogether/MyDediServer/Master/modoverrides.lua; \
+    if [ ! -f "/home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/modoverrides.lua" ]; then \
+        echo 'return {}' > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/modoverrides.lua; \
     fi && \
-    if [ ! -f "/home/steam/.klei/DoNotStarveTogether/MyDediServer/Caves/modoverrides.lua" ]; then \
-        echo 'return {}' > /home/steam/.klei/DoNotStarveTogether/MyDediServer/Caves/modoverrides.lua; \
+    if [ ! -f "/home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/modoverrides.lua" ]; then \
+        echo 'return {}' > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/modoverrides.lua; \
     fi
 
 # Copiar configuración de supervisor
@@ -113,11 +113,11 @@ ls -la /home/steam/ || echo "Error listando /home/steam/"
 ls -la /home/steam/.klei/ || echo "Error listando .klei"
 
 echo "Probando generación de cluster.ini..."
-mkdir -p /home/steam/.klei/DoNotStarveTogether/MyDediServer
+mkdir -p /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether
 echo "Directorio creado exitosamente"
 
 # Generar cluster.ini básico
-cat > /home/steam/.klei/DoNotStarveTogether/MyDediServer/cluster.ini << EOF
+cat > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/cluster.ini << EOF
 [GAMEPLAY]
 game_mode = survival
 max_players = 12
@@ -144,13 +144,13 @@ cluster_key = defaultPass
 EOF
 
 echo "cluster.ini generado exitosamente"
-cat /home/steam/.klei/DoNotStarveTogether/MyDediServer/cluster.ini
+cat /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/cluster.ini
 
 # Configurar token
 if [ ! -z "$STEAM_TOKEN" ]; then
     echo "Configurando Steam token..."
-    echo "$STEAM_TOKEN" > /home/steam/.klei/DoNotStarveTogether/MyDediServer/cluster_token.txt
-    chown steam:steam /home/steam/.klei/DoNotStarveTogether/MyDediServer/cluster_token.txt
+    echo "$STEAM_TOKEN" > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/cluster_token.txt
+    chown steam:steam /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/cluster_token.txt
     echo "Token configurado"
 else
     echo "ADVERTENCIA: STEAM_TOKEN no configurado"
@@ -169,19 +169,19 @@ echo "Verificando librerías críticas..."
 ldd /home/steam/dst/bin/dontstarve_dedicated_server_nullrenderer | grep "not found" || echo "✅ Todas las librerías encontradas"
 
 echo "Probando ejecución directa..."
-cd /home/steam
-timeout 5 ./dst/bin/dontstarve_dedicated_server_nullrenderer -help 2>&1 | head -3 || echo "Error en ejecución directa"
+cd /home/steam/dst
+timeout 5 ./bin/dontstarve_dedicated_server_nullrenderer -help 2>&1 | head -3 || echo "Error en ejecución directa"
 
 echo "Verificando archivos de configuración..."
-ls -la /home/steam/.klei/DoNotStarveTogether/MyDediServer/Master/ || echo "Master config faltante"
-ls -la /home/steam/.klei/DoNotStarveTogether/MyDediServer/Caves/ || echo "Caves config faltante"
+ls -la /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/ || echo "Master config faltante"
+ls -la /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/ || echo "Caves config faltante"
 
 echo "Verificando permisos..."
-chown -R steam:steam /home/steam/.klei/DoNotStarveTogether/MyDediServer/
+chown -R steam:steam /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/
 
 echo "Probando inicio manual de DST para ver errores..."
 cd /home/steam/dst
-sudo -u steam timeout 10 ./bin/dontstarve_dedicated_server_nullrenderer -console -cluster MyDediServer -shard Master &
+sudo -u steam timeout 10 ./bin/dontstarve_dedicated_server_nullrenderer -console -cluster DoNotStarveTogether -shard Master &
 sleep 3
 echo "Logs del test manual:"
 tail -n 20 /var/log/dst-master.log 2>/dev/null || echo "No hay logs de master aún"
