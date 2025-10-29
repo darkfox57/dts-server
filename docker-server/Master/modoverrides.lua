@@ -77,5 +77,11 @@ return {
       show_uses=-1 
     },
     enabled=true 
-  } 
+  },
+  ["workshop-885290954"]={
+    configuration_options={},
+    enabled=true 
+  },
+  -- Agregar nuevos mods aquí:
+  -- ["workshop-ID_DEL_MOD"]={ configuration_options={}, enabled=true }, 
 }
