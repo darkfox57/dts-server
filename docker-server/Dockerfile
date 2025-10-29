@@ -81,13 +81,11 @@ RUN if [ ! -f "/home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/
     fi && \
     if [ ! -f "/home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/leveldataoverride.lua" ]; then \
         echo 'return { override_enabled = true, preset = "DST_CAVE", settings = {} }' > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/leveldataoverride.lua; \
-    fi && \
-    if [ ! -f "/home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/modoverrides.lua" ]; then \
-        echo 'return {}' > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/modoverrides.lua; \
-    fi && \
-    if [ ! -f "/home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/modoverrides.lua" ]; then \
-        echo 'return {}' > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/modoverrides.lua; \
     fi
+
+# FORZAR USO DE NUESTROS ARCHIVOS DE MODS - Siempre copiar y sobreescribir
+COPY --chown=steam:steam Master/modoverrides.lua /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/modoverrides.lua
+COPY --chown=steam:steam Caves/modoverrides.lua /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/modoverrides.lua
 
 # Copiar configuración de supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
