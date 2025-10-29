@@ -179,6 +179,13 @@ ls -la /home/steam/.klei/DoNotStarveTogether/MyDediServer/Caves/ || echo "Caves 
 echo "Verificando permisos..."
 chown -R steam:steam /home/steam/.klei/DoNotStarveTogether/MyDediServer/
 
+echo "Probando inicio manual de DST para ver errores..."
+cd /home/steam
+sudo -u steam timeout 10 ./dst/bin/dontstarve_dedicated_server_nullrenderer -console -cluster MyDediServer -shard Master &
+sleep 3
+echo "Logs del test manual:"
+tail -n 20 /var/log/dst-master.log 2>/dev/null || echo "No hay logs de master aún"
+
 echo "Verificando supervisor..."
 which supervisord || echo "supervisord no encontrado"
 ls -la /etc/supervisor/conf.d/supervisord.conf || echo "supervisord.conf no encontrado"
