@@ -11,8 +11,10 @@ services:
       - "10999:10999/udp"  # Master server port
       - "10998:10998/udp"  # Caves server port
       - "10888:10888/tcp"  # Cluster communication
-      - "27017:27017/tcp"  # Master server port for Steam
-      - "8767:8767/tcp"    # Authentication port
+      - "27017:27017/tcp"  # Caves server port for Steam
+      - "27018:27018/tcp"  # Master server port for Steam
+      - "8767:8767/tcp"    # Caves authentication port
+      - "8768:8768/tcp"    # Master authentication port
     volumes:
       - dst_data:/home/steam/.klei/DoNotStarveTogether/MyDediServer
       - dst_game:/home/steam/dst
