@@ -34,6 +34,7 @@ RUN dpkg --add-architecture i386 && \
     lib32stdc++6 \
     libcurl4-gnutls-dev \
     libcurl4:i386 \
+    libcurl4-gnutls-dev:i386 \
     libgcc-s1:i386 \
     libstdc++6:i386 \
     libc6:i386 \
@@ -149,6 +150,13 @@ ls -la /home/steam/dst/bin64/ 2>/dev/null || echo "Verificando bin64:"
 
 echo "Verificando librerías 32-bit..."
 ldd /home/steam/dst/bin/dontstarve_dedicated_server_nullrenderer 2>/dev/null | head -10 || echo "Error verificando librerías"
+
+echo "Verificando librerías críticas..."
+ldd /home/steam/dst/bin/dontstarve_dedicated_server_nullrenderer | grep "not found" || echo "✅ Todas las librerías encontradas"
+
+echo "Probando ejecución directa..."
+cd /home/steam
+timeout 5 ./dst/bin/dontstarve_dedicated_server_nullrenderer -help 2>&1 | head -3 || echo "Error en ejecución directa"
 
 echo "Verificando supervisor..."
 which supervisord || echo "supervisord no encontrado"
