@@ -1,3 +1,4 @@
+# 🦊 DARKFOX DST SERVER - FORCE REBUILD: 2025-10-29-02:00
 FROM ubuntu:20.04
 
 # Evitar preguntas interactivas durante la instalación
