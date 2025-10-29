@@ -75,6 +75,7 @@ COPY --chown=steam:steam Caves/ /home/steam/.klei/DoNotStarveTogether/MyDediServ
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Crear script de diagnóstico simple
+# FORCE REBUILD - Version 2.0 - Oct 28 2025
 RUN cat > /home/steam/start_server.sh << 'SCRIPT'
 #!/bin/bash
 set -e
@@ -137,9 +138,10 @@ else
 fi
 
 echo "Verificando ejecutable DST..."
+echo "🔍 NUEVO DIAGNÓSTICO - Version 2.0"
 find /home/steam/dst -name "*dontstarve*" -type f 2>/dev/null || echo "No se encontró ejecutable DST"
 ls -la /home/steam/dst/bin/ 2>/dev/null || echo "Directorio bin no existe"
-ls -la /home/steam/dst/bin64/ 2>/dev/null || echo "Directorio bin64 no existe"
+ls -la /home/steam/dst/bin64/ 2>/dev/null || echo "Verificando bin64:"
 
 echo "Verificando supervisor..."
 which supervisord || echo "supervisord no encontrado"
