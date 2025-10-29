@@ -75,6 +75,20 @@ RUN mkdir -p /home/steam/.klei/DoNotStarveTogether/MyDediServer/Master \
 COPY --chown=steam:steam Master/ /home/steam/.klei/DoNotStarveTogether/MyDediServer/Master/
 COPY --chown=steam:steam Caves/ /home/steam/.klei/DoNotStarveTogether/MyDediServer/Caves/
 
+# Crear configuraciones básicas de mundo si no existen
+RUN if [ ! -f "/home/steam/.klei/DoNotStarveTogether/MyDediServer/Master/leveldataoverride.lua" ]; then \
+        echo 'return { override_enabled = true, settings = {} }' > /home/steam/.klei/DoNotStarveTogether/MyDediServer/Master/leveldataoverride.lua; \
+    fi && \
+    if [ ! -f "/home/steam/.klei/DoNotStarveTogether/MyDediServer/Caves/leveldataoverride.lua" ]; then \
+        echo 'return { override_enabled = true, preset = "DST_CAVE", settings = {} }' > /home/steam/.klei/DoNotStarveTogether/MyDediServer/Caves/leveldataoverride.lua; \
+    fi && \
+    if [ ! -f "/home/steam/.klei/DoNotStarveTogether/MyDediServer/Master/modoverrides.lua" ]; then \
+        echo 'return {}' > /home/steam/.klei/DoNotStarveTogether/MyDediServer/Master/modoverrides.lua; \
+    fi && \
+    if [ ! -f "/home/steam/.klei/DoNotStarveTogether/MyDediServer/Caves/modoverrides.lua" ]; then \
+        echo 'return {}' > /home/steam/.klei/DoNotStarveTogether/MyDediServer/Caves/modoverrides.lua; \
+    fi
+
 # Copiar configuración de supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
@@ -157,6 +171,13 @@ ldd /home/steam/dst/bin/dontstarve_dedicated_server_nullrenderer | grep "not fou
 echo "Probando ejecución directa..."
 cd /home/steam
 timeout 5 ./dst/bin/dontstarve_dedicated_server_nullrenderer -help 2>&1 | head -3 || echo "Error en ejecución directa"
+
+echo "Verificando archivos de configuración..."
+ls -la /home/steam/.klei/DoNotStarveTogether/MyDediServer/Master/ || echo "Master config faltante"
+ls -la /home/steam/.klei/DoNotStarveTogether/MyDediServer/Caves/ || echo "Caves config faltante"
+
+echo "Verificando permisos..."
+chown -R steam:steam /home/steam/.klei/DoNotStarveTogether/MyDediServer/
 
 echo "Verificando supervisor..."
 which supervisord || echo "supervisord no encontrado"
