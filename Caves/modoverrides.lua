@@ -77,5 +77,7 @@ return {
       show_uses=-1 
     },
     enabled=true 
-  } 
+  },
+  -- Agregar nuevos mods aquí:
+  -- ["workshop-ID_DEL_MOD"]={ configuration_options={}, enabled=true }, 
 }

@@ -123,6 +123,8 @@ game_mode = survival
 max_players = 12
 pvp = false
 pause_when_empty = true
+mods_enabled = true
+vote_enabled = false
 
 [NETWORK]
 lan_only_cluster = false
