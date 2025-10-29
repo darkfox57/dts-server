@@ -11,3 +11,4 @@ ServerModSetup("458940297")  -- Display Food Values
 ServerModSetup("623749604")  -- Ice Flingomatic Range
 ServerModSetup("666155465")  -- Show Me (Display Information)
 ServerModSetup("885290954")  -- Spanish Language Pack
+ServerModSetup("1185229307")  -- Epic health bar

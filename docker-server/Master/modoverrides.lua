@@ -82,6 +82,18 @@ return {
     configuration_options={},
     enabled=true 
   },
+  ["workshop-1185229307"]={
+    configuration_options={
+      divider=5,
+      random_health_value=0,
+      random_range=0,
+      send_unknwon_prefabs=false,
+      show_type=0,
+      unknwon_prefabs=1,
+      use_blacklist=true 
+    },
+    enabled=true 
+  },
   -- Agregar nuevos mods aquí:
   -- ["workshop-ID_DEL_MOD"]={ configuration_options={}, enabled=true }, 
 }
