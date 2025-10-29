@@ -156,6 +156,13 @@ else
     echo "ADVERTENCIA: STEAM_TOKEN no configurado"
 fi
 
+echo "Verificando estructura de DST..."
+ls -la /home/steam/dst/ | head -20
+echo "Verificando si hay directorio data..."
+ls -la /home/steam/dst/data/ 2>/dev/null | head -10 || echo "No hay directorio data en /home/steam/dst/"
+echo "Buscando directorio data..."
+find /home/steam/dst -name "data" -type d 2>/dev/null || echo "No se encontró directorio data"
+
 echo "Verificando ejecutable DST..."
 echo "🔍 NUEVO DIAGNÓSTICO - Version 2.0"
 find /home/steam/dst -name "*dontstarve*" -type f 2>/dev/null || echo "No se encontró ejecutable DST"
@@ -180,8 +187,8 @@ echo "Verificando permisos..."
 chown -R steam:steam /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/
 
 echo "Probando inicio manual de DST para ver errores..."
-cd /home/steam/dst
-sudo -u steam timeout 10 ./bin/dontstarve_dedicated_server_nullrenderer -console -cluster DoNotStarveTogether -shard Master &
+cd /home/steam/dst/bin
+sudo -u steam timeout 10 ./dontstarve_dedicated_server_nullrenderer -console -cluster DoNotStarveTogether -shard Master &
 sleep 3
 echo "Logs del test manual:"
 tail -n 20 /var/log/dst-master.log 2>/dev/null || echo "No hay logs de master aún"
