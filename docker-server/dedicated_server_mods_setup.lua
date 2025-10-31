@@ -6,7 +6,7 @@ ServerModSetup("2078243581") -- Combat Target
 ServerModSetup("347079953")  -- Display Food Values
 ServerModSetup("358749986")  -- Player Status
 ServerModSetup("374550642")  -- Increased Stack sizes
-ServerModSetup("375859599")  -- Health Info
+-- ServerModSetup("375859599")  -- Health Info (DISABLED - CAUSING CRASHES)
 ServerModSetup("458940297")  -- Display Food Values
 ServerModSetup("623749604")  -- Ice Flingomatic Range
 ServerModSetup("666155465")  -- Show Me (Display Information)
