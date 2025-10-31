@@ -93,6 +93,17 @@ return {
     enabled=true 
   },
   ["workshop-463740026"]={ configuration_options={ ownership=false }, enabled=true },
+  ["workshop-623749604"]={
+    configuration_options={
+      Craft="Normal",
+      Destroyable="DestroyByAll",
+      FoodSpoilage=1,
+      Language="Sp",
+      Position="Center",
+      Slots=80 
+    },
+    enabled=true 
+  },
   ["workshop-666155465"]={
     configuration_options={
       chestB=-1,

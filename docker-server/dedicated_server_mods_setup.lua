@@ -9,7 +9,7 @@ ServerModSetup("370373189")  -- DST Advanced Farming
 ServerModSetup("374550642")  -- Increased Stack sizes
 ServerModSetup("458940297")  -- Display Food Values
 ServerModSetup("463740026")  -- Personal Chesters
--- ServerModSetup("623749604")  -- [DST] Storeroom
+ServerModSetup("623749604")  -- [DST] Storeroom
 ServerModSetup("666155465")  -- Show Me (Display Information)
 ServerModSetup("728459184")  -- Increase Storage
 ServerModSetup("885290954")  -- Spanish Language Pack

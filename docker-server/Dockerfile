@@ -151,18 +151,29 @@ cat /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/cluster.ini
 
 # Configurar token
 if [ ! -z "$STEAM_TOKEN" ]; then
-    echo "Configurando Steam token..."
+    echo "✅ Configurando Steam token..."
     echo "$STEAM_TOKEN" > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/cluster_token.txt
     chown steam:steam /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/cluster_token.txt
-    echo "Token configurado"
+    echo "✅ Token configurado correctamente"
 else
-    echo "ADVERTENCIA: STEAM_TOKEN no configurado"
+    echo "❌ CRÍTICO: STEAM_TOKEN no configurado - esto causará que el servidor se cierre"
+    echo "El servidor no puede registrarse con Steam sin un token válido"
 fi
 
-echo "Verificando estructura de DST..."
-ls -la /home/steam/dst/ | head -20
-echo "Verificando si hay directorio data..."
-ls -la /home/steam/dst/data/ 2>/dev/null | head -10 || echo "No hay directorio data en /home/steam/dst/"
+echo "Verificando archivos críticos..."
+echo "📁 Verificando cluster.ini:"
+ls -la /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/cluster.ini
+echo "📁 Verificando token:"
+ls -la /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/cluster_token.txt 2>/dev/null || echo "❌ Token no encontrado"
+echo "📁 Verificando configuraciones de shards:"
+ls -la /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/
+ls -la /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/
+
+echo "Verificando configuración de mundo..."
+echo "📋 Master leveldataoverride.lua:"
+cat /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/leveldataoverride.lua
+echo "📋 Caves leveldataoverride.lua:"
+cat /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/leveldataoverride.lua
 echo "Buscando directorio data..."
 find /home/steam/dst -name "data" -type d 2>/dev/null || echo "No se encontró directorio data"
 
