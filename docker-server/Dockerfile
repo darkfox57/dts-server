@@ -71,23 +71,19 @@ RUN ./steamcmd.sh +force_install_dir /home/steam/dst +login anonymous +app_updat
 # Cambiar de vuelta a root para configurar supervisor
 USER root
 
-# Crear directorios y copiar configuraciones de shards
+# Crear directorios y copiar configuraciones de shards (SIN ARCHIVOS DE SAVE)
 RUN mkdir -p /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master \
     && mkdir -p /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves
 
-# Copiar archivos de configuración de shards
-COPY --chown=steam:steam Master/ /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/
-COPY --chown=steam:steam Caves/ /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/
+# Copiar SOLO archivos de configuración (NO saves)
+COPY --chown=steam:steam Master/server.ini /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/server.ini
+COPY --chown=steam:steam Caves/server.ini /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/server.ini
 
-# Crear configuraciones básicas de mundo si no existen
-RUN if [ ! -f "/home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/leveldataoverride.lua" ]; then \
-        echo 'return { override_enabled = true, settings = {} }' > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/leveldataoverride.lua; \
-    fi && \
-    if [ ! -f "/home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/leveldataoverride.lua" ]; then \
-        echo 'return { override_enabled = true, preset = "DST_CAVE", settings = {} }' > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/leveldataoverride.lua; \
-    fi
+# Crear configuraciones básicas de mundo si no existen (MUNDO ALEATORIO)
+RUN echo 'return { override_enabled = true, settings = {} }' > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/leveldataoverride.lua && \
+    echo 'return { override_enabled = true, preset = "DST_CAVE", settings = {} }' > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/leveldataoverride.lua
 
-# FORZAR USO DE NUESTROS ARCHIVOS DE MODS - Siempre copiar y sobreescribir
+# COPIAR SOLO MODOVERRIDES - NO FORZAR EN CADA INICIO
 COPY --chown=steam:steam Master/modoverrides.lua /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/modoverrides.lua
 COPY --chown=steam:steam Caves/modoverrides.lua /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/modoverrides.lua
 
