@@ -1,44 +1,84 @@
 return {
+  ["workshop-1185229307"]={
+    configuration_options={
+      CAMERA=true,
+      CAPTURE=false,
+      DAMAGE_NUMBERS=true,
+      DAMAGE_RESISTANCE=true,
+      FRAME_PHASES=true,
+      GLOBAL=false,
+      GLOBAL_NUMBERS=false,
+      HEADER_CLIENT=false,
+      HEADER_SERVER=false,
+      HORIZONTAL_OFFSET=0,
+      TAG="EPIC",
+      WETNESS_METER=false 
+    },
+    enabled=true 
+  },
+  ["workshop-1458450094"]={
+    configuration_options={
+      [""]=0,
+      houndstooth=false,
+      infinite=false,
+      livinglog=false,
+      log=false,
+      mode="fix",
+      retrapfix=60,
+      retraprandomx=10,
+      retraprandomy=120,
+      rope=false,
+      stinger=false 
+    },
+    enabled=true 
+  },
   ["workshop-1818688368"]={ configuration_options={  }, enabled=true },
+  ["workshop-1974725370"]={
+    configuration_options={
+      leastnum_beefalo=2,
+      leastnum_beehive=2,
+      leastnum_catcoonden=2,
+      leastnum_knight=2,
+      leastnum_lightninggoat=2,
+      leastnum_rocky=2,
+      leastnum_slurtlehole=2,
+      leastnum_spiderden=2,
+      respawnmechanism="scripts/respawnnear.lua",
+      respawntime=5 
+    },
+    enabled=true 
+  },
   ["workshop-2078243581"]={
     configuration_options={ Blue=0, Display="target", Green=0, Projectile=true, Red=1, Type="hit" },
     enabled=true 
   },
   ["workshop-347079953"]={
-    configuration_options={ DFV_Language="ES", DFV_MinimalMode="default" },
+    configuration_options={ DFV_Language="SP", DFV_MinimalMode="default" },
     enabled=true 
   },
   ["workshop-358749986"]={
     configuration_options={ IndicatorSize=3, MaxIndicator=7000, PlayerIndicators=1 },
     enabled=true 
   },
+  ["workshop-370373189"]={
+    configuration_options={ [""]=0, W_Grow="yes", b_seeds="yes", greenhouserecipe="easy" },
+    enabled=true 
+  },
   ["workshop-374550642"]={
     configuration_options={
-      STACK_SIZE_LARGEITEM=10,
-      STACK_SIZE_MEDITEM=20,
+      STACK_SIZE_LARGEITEM=40,
+      STACK_SIZE_MEDITEM=40,
       STACK_SIZE_PELLET=120,
       STACK_SIZE_SMALLITEM=40,
       STACK_SIZE_TINYITEM=60 
     },
     enabled=true 
   },
-  -- ["workshop-375859599"]={ -- Health Info MOD DISABLED - CAUSING CRASHES
-  --   configuration_options={
-  --     divider=5,
-  --     random_health_value=0,
-  --     random_range=0,
-  --     send_unknwon_prefabs=false,
-  --     show_type=0,
-  --     unknwon_prefabs=1,
-  --     use_blacklist=true 
-  --   },
-  --   enabled=true 
-  -- },
   ["workshop-458940297"]={
     configuration_options={
       DFV_ClientPrediction="default",
       DFV_FueledSettings="default",
-      DFV_Language="EN",
+      DFV_Language="SP",
       DFV_MinimalMode="default",
       DFV_PercentReplace="default",
       DFV_ShowACondition="default",
@@ -52,12 +92,13 @@ return {
     },
     enabled=true 
   },
+  ["workshop-463740026"]={ configuration_options={ ownership=false }, enabled=true },
   ["workshop-623749604"]={
     configuration_options={
       Craft="Normal",
       Destroyable="DestroyByAll",
       FoodSpoilage=1,
-      Language="ES",
+      Language="Sp",
       Position="Center",
       Slots=80 
     },
@@ -78,22 +119,19 @@ return {
     },
     enabled=true 
   },
-  ["workshop-885290954"]={
-    configuration_options={},
-    enabled=true 
-  },
-  ["workshop-1185229307"]={
+  ["workshop-728459184"]={
     configuration_options={
-      divider=5,
-      random_health_value=0,
-      random_range=0,
-      send_unknwon_prefabs=false,
-      show_type=0,
-      unknwon_prefabs=1,
-      use_blacklist=true 
+      INCREASEBACKPACKSIZES_BACKPACK=12,
+      INCREASEBACKPACKSIZES_ICEPACK=12,
+      INCREASEBACKPACKSIZES_KRAMPUSSACK=18,
+      INCREASEBACKPACKSIZES_PIGGYBACK=16,
+      largerbundlecontainer=9,
+      largerchester=12,
+      largerdragonflychest=16,
+      largericebox=12,
+      largertreasurechest=12 
     },
     enabled=true 
   },
-  -- Agregar nuevos mods aquí:
-  -- ["workshop-ID_DEL_MOD"]={ configuration_options={}, enabled=true }, 
+  ["workshop-885290954"]={ configuration_options={  }, enabled=true } 
 }
