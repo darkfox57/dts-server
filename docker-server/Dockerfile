@@ -78,10 +78,8 @@ RUN mkdir -p /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master \
 # Copiar SOLO archivos de configuración (NO saves)
 COPY --chown=steam:steam Master/server.ini /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/server.ini
 COPY --chown=steam:steam Caves/server.ini /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/server.ini
-
-# Crear configuraciones básicas de mundo si no existen (MUNDO ALEATORIO)
-RUN echo 'return { override_enabled = true, settings = {} }' > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/leveldataoverride.lua && \
-    echo 'return { override_enabled = true, preset = "DST_CAVE", settings = {} }' > /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/leveldataoverride.lua
+COPY --chown=steam:steam Master/leveldataoverride.lua /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/leveldataoverride.lua
+COPY --chown=steam:steam Caves/leveldataoverride.lua /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Caves/leveldataoverride.lua
 
 # COPIAR SOLO MODOVERRIDES - NO FORZAR EN CADA INICIO
 COPY --chown=steam:steam Master/modoverrides.lua /home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether/Master/modoverrides.lua
