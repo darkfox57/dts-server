@@ -16,8 +16,8 @@ services:
       - "8767:8767/tcp"    # Caves authentication port
       - "8768:8768/tcp"    # Master authentication port
     volumes:
-      - dst_data:/home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether
-      - dst_game:/home/steam/dst
+      - ./data:/home/steam/.klei/DoNotStarveTogether/DoNotStarveTogether
+      - ./game:/home/steam/dst
     environment:
       - CLUSTER_NAME=dts-server
       - CLUSTER_PASSWORD=
@@ -27,12 +27,6 @@ services:
       - PAUSE_WHEN_EMPTY=true
     networks:
       - dst-network
-
-volumes:
-  dst_data:
-    driver: local
-  dst_game:
-    driver: local
 
 networks:
   dst-network:
